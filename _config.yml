@@ -5,9 +5,11 @@ description: >-
   PhD student, Department of Biology, Stanford Universiy
 baseurl: "" 
 # url: "https://egorlappo.github.io" 
-twitter_username: egor_lappo
-github_username:  egorlappo
 photo: /assets/pic.jpeg
+
+social:
+  twitter: egor_lappo
+  github: egorlappo
 
 github:
   is_user_page: true
