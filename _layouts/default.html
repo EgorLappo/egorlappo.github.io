@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <!--- hide my photo on mobiles for greater readability -->
     <style>
-        .photo{display:inline;}
+        .photo{display:inline;width:90%}
         @media (max-width: 768px) {
             .photo  {
                 display:none;
@@ -39,10 +39,14 @@
         <p>
             {{ site.description | default: site.github.project_tagline }}
             <br>
-            twitter: <a href="https://twitter.com/{{site.social.twitter}}">@{{site.social.twitter}}</a>
+            twitter: <a href="https://twitter.com/{{site.social.twitter}}"><tt>@{{site.social.twitter}}</tt></a>
             <br>
-            github: <a href="https://github.com/{{site.social.github}}">{{site.social.github}}</a>
+            github: <a href="https://github.com/{{site.social.github}}"><tt>{{site.social.github}}</tt></a>
+            <br>
+            email: <a href="mailto:{{site.email}}"><tt>{{site.email}}</tt></a>
         </p>
+
+        <p><b>I have recently changed my name! <br> Before, I was <i>Egor Alimpiev</i>. <br> You can still email me at <br> <tt>alimpiev (at) stanford.edu</tt>!</b></p>
 
       </header>
       <section>
