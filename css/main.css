@@ -1,25 +1,32 @@
 @import "base.css";
 
-@font-face {
-  font-family: 'PT Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('PT Sans'), local('PTSans-Regular'), url(PTSans-Regular.woff) format('woff');
+.photo{
+    display:inline;
+    max-width:300px;
+    width:90%;
 }
-
+        
+@media (max-width: 768px) {
+    .photo  {
+        display:none;
+    }
+}
 
 body {
     background:#fff;
     color: #444;
-    font-family: 'PT Sans', 'helvetica', sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-size: 16px;
-    font-weight:300;
+    font-weight:400;
     margin: 50px auto 0px auto;
-    width: 600px;
+    max-width: 900px;
+}
+
+tt {
+    font-family: 'Overpass Mono', monospace;
 }
 
 div#header {
-    background: url(../images/haskell-logo.png) no-repeat;
     background-size: 73px;
     border-bottom: 2px solid #ddd;
     margin-bottom: 30px;
@@ -27,31 +34,15 @@ div#header {
     padding: 12px 0px 12px 0px;
 }
 
-div.logo a {
-    color: #343333;
-    display:none;
-    float: left;
-    font-size: 18px;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-div.logo a:hover {
-    color: #A43400;
-    float: left;
-    font-size: 18px;
-    font-weight: bold;
-    text-decoration: none;
-}
-
 header nav {
     text-align: right;
+    font-family: 'Nunito', sans-serif;
 }
 
 header nav a {
     color: #343333;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 700;
     margin-left: 12px;
     text-decoration: none;
     text-transform: uppercase;
@@ -97,15 +88,21 @@ ul, ol {
 }
 
 a {
-    color: #720000;
-    font-weight: 700;
+    color: #01473c;
+    font-weight: 500;
     text-decoration: none;
 }
 
 p {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 20px;
     margin-bottom:20px;
+}
+
+.sidebar p {
+    font-size: 16px;
+    line-height: 18px;
+    margin-bottom: 12px;
 }
 
 /* SYNTAX HIGHLIGHTING */
@@ -142,7 +139,7 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
 div.sourceCode
-  { color: #1f1c1b; background-color: #ffffff; }
+  { color: #1f1c1b; background-color: #0e907a0f; padding: 12px; border-radius: 5px;}
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }

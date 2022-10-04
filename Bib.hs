@@ -76,8 +76,8 @@ field pub a =
 
 texToMarkdown s = 
     let result = runPure $ do 
-        x <- readLaTeX def (T.pack s) 
-        writeMarkdown def x
+          x <- readLaTeX def (T.pack s) 
+          writeMarkdown def x
     in case result of 
         Left e -> error $ "error reading latex commands in the string " <> show s <> ":\n" <> show e
-        (Right s') -> (T.unpack $ T.strip s') <> ". "
+        (Right s') -> T.unpack (T.strip s') <> ". "
