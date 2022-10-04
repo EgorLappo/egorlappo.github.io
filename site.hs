@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Hakyll
 
+import Bib
 
 --------------------------------------------------------------------------------
 config :: Configuration
@@ -18,6 +19,10 @@ main = hakyllWith config $ do
     match "css/*" $ do
         route   idRoute
         compile compressCssCompiler
+
+    match "citations.csl" $ compile cslCompiler
+
+    match "pubs.bib"      $ compile biblioCompiler
 
     match "posts/*" $ do
         route $ setExtension "html"
@@ -47,7 +52,7 @@ main = hakyllWith config $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let indexCtx =
                     listField "posts" postCtx (return posts) `mappend`
-                    constField "title" "Home"                `mappend`
+                    constField "title" "Hello!"              `mappend`
                     defaultContext
 
             getResourceBody
