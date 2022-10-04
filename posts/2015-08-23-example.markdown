@@ -15,17 +15,16 @@ mauris. Nulla est odio, posuere id ullamcorper sit amet, tincidunt vel justo.
 Curabitur placerat tincidunt varius. Nulla vulputate, ipsum eu consectetur
 mollis, dui nibh aliquam neque, at ultricies leo ligula et arcu.
 
-```haskell
-staticCtx :: Context String
-staticCtx = 
-    constField "email" "egor@ccrma.stanford.com" `mappend`
-    constField "twitter" "egor_lappo" `mappend`
-    constField "github"  "egorlappo" `mappend`
-    constField "pronunciation" "Ye-gór La-poe" `mappend`
-    defaultContext
-
-postCtx :: Context String
-postCtx =
-    dateField "date" "%B %e, %Y" `mappend`
-    defaultContext
+```rust
+/// simple binomial sampler that writes the results in a given buffer
+fn binomial_sample(buffer: &mut Vec<f64>, p: f64, rng: &mut SmallRng) {
+    for i in 0..buffer.len() {
+        let x: f64 = rng.gen();
+        if x > p {
+            buffer[i] = 0.0;
+        } else {
+            buffer[i] = 1.0;
+        }
+    }
+}
 ```

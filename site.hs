@@ -69,7 +69,7 @@ main = do
 staticCtx :: Context String
 staticCtx = 
     constField "email" "egor@ccrma.stanford.com" `mappend`
-    constField "description" "PhD student, Department of Biology, Stanford University" `mappend`
+    constField "description" "PhD student,\nDepartment of Biology,\nStanford University" `mappend`
     constField "twitter" "egor_lappo" `mappend`
     constField "github"  "egorlappo" `mappend`
     constField "pronunciation" "Ye-gór La-poe" `mappend`
