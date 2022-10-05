@@ -6,7 +6,7 @@ description: |
     of a bibliography file into a nicely formatted markdown with Haskell 
 ---
 
-While setting up my personal [page](https://egorlappo.github.io) with Hakyll, I have discovered that there is no simple copy-pastable solution for generating a list of publications from a `.bib` file. In this post I show a way to manually transform contents of a bibliography file into a nicely formatted markdown. You can copy my code and very quickly adapt it to your needs. The final result is available at ...
+While setting up my personal [page](https://egorlappo.github.io) with Hakyll, I have discovered that there is no simple copy-pastable solution for generating a list of publications from a `.bib` file. In this post I show a way to manually transform contents of a bibliography file into a nicely formatted markdown. You can copy my code and very quickly adapt it to your needs. The final result is available [on github](https://github.com/EgorLappo/egorlappo.github.io/blob/master/Bib.hs).
 
 When it comes to references, Pandoc does have built-in citation processing machinery, and it can be used with Hakyll to cite works in blog posts (see, for example, [this guide](https://github.com/jaspervdj/hakyll-citeproc-example). As for obtaining a plain publication list, the main suggestion seems to be to use an empty file containing a `\nocite{*}` command to make Pandoc list the references. 
 
@@ -152,7 +152,7 @@ I have tried to deal with optional fields in a "monadic" way, by using `fmap` an
 
 # Use it yourself
 
-The source file for this post is available at .... A result of runnning this script can be seen at [my homepage](https://egorlappo.github.io).
+The source file for this post is available [here](https://github.com/EgorLappo/egorlappo.github.io/blob/master/Bib.hs). A result of runnning this script can be seen at [my homepage](https://egorlappo.github.io) ([source](https://github.com/EgorLappo/egorlappo.github.io/)).
 
 To use it with Hakyll, you can use a `listField` to pass a list of references into a template. In the main file, you can do something like this: 
 ```haskell
