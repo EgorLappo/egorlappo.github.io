@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -15,13 +14,12 @@ of a bibliography file into a nicely formatted markdown with Haskell " />
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
         
-        <link rel="stylesheet" type="text/css" href="/css/main.css" />
-        <link rel="stylesheet" type="text/css" href="/css/blogpost.css" />
+        <link rel="stylesheet" type="text/css" href="../css/main.css" />
+        <link rel="stylesheet" type="text/css" href="../css/blogpost.css" />
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css" integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X" crossorigin="anonymous">
         <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js" integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz" crossorigin="anonymous"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"
-            onload="renderMathInElement(document.body);"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 
     </head>
     <body>
@@ -29,8 +27,8 @@ of a bibliography file into a nicely formatted markdown with Haskell " />
             <div class="row">
                 <header>
                     <nav>
-                        <a href="/">Home</a>
-                        <a href="/blog.html">Blog</a>
+                        <a href="../">Home</a>
+                        <a href="../blog.html">Blog</a>
                     </nav>
                 </header>
             </div>
@@ -55,19 +53,16 @@ of a bibliography file into a nicely formatted markdown with Haskell " />
                     <br>
                     
                     <div class="content">
-                        <p>While setting up my personal <a
-href="https://egorlappo.github.io">page</a> with Hakyll, I have
+                        <p>While setting up my personal <a href="https://egorlappo.github.io">page</a> with Hakyll, I have
 discovered that there is no simple copy-pastable solution for generating
 a list of publications from a <code>.bib</code> file. In this post I
 show a way to manually transform contents of a bibliography file into a
 nicely formatted markdown. You can copy my code and very quickly adapt
-it to your needs. The final result is available <a
-href="https://github.com/EgorLappo/egorlappo.github.io/blob/master/Bib.hs">on
+it to your needs. The final result is available <a href="https://github.com/EgorLappo/egorlappo.github.io/blob/master/Bib.hs">on
 github</a>.</p>
 <p>When it comes to references, Pandoc does have built-in citation
 processing machinery, and it can be used with Hakyll to cite works in
-blog posts (see, for example, <a
-href="https://github.com/jaspervdj/hakyll-citeproc-example">this
+blog posts (see, for example, <a href="https://github.com/jaspervdj/hakyll-citeproc-example">this
 guide</a>). As for obtaining a plain publication list, the main
 suggestion seems to be to use an empty file containing a
 <code>\nocite{*}</code> command to make Pandoc list the references.</p>
@@ -76,8 +71,7 @@ The basic requirements are: reverse chronological sorting of references
 and no “unique names”, which means that repeated author combinations
 should be written out in full. With biblatex, this can be solved with a
 combination of settings:</p>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode latex"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">\usepackage</span>[backend=biber, style=numeric, sorting=ydnt, firstinits=true, uniquename=false]{<span class="ex">biblatex</span>}</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">\usepackage</span>[backend=biber, style=numeric, sorting=ydnt, firstinits=true, uniquename=false]{<span class="ex">biblatex</span>}</span></code></pre></div>
 <p>With Pandoc, this problem seems to require a manual approach. I will
 show the basic code to process a personal bibliography.</p>
 <h1 id="setup">Setup</h1>
@@ -88,8 +82,7 @@ unsophisticated parsers of <code>.bib</code> files, which is exactly
 what we need.</p>
 <h1 id="code">Code</h1>
 <p>Let’s begin with some necessary imports:</p>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">Bib</span> (publicationList) <span class="kw">where</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">Bib</span> (publicationList) <span class="kw">where</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Control.Applicative</span> ( (&lt;|&gt;) )</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.List</span> ( sortOn ) </span>
@@ -105,8 +98,7 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a 
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span> ( runPure, readLaTeX, writeMarkdown, def )</span></code></pre></div>
 <p>Now, let’s write the main logic of the module: the function to read
 the file, run the parser, and call a proper formatter on each entry.</p>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">publicationList ::</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> [<span class="dt">String</span>]</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">publicationList ::</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> [<span class="dt">String</span>]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>publicationList filename <span class="ot">=</span> <span class="kw">do</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- read and parse bibtex entries</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    pubs <span class="ot">&lt;-</span> readPubs filename</span>
@@ -137,8 +129,7 @@ URL. Of course, this is mostly arbitrary.</p>
 <p>We need several convenience functions first. The fields of the entry
 are parsed into an association list, so we can adapt <code>lookup</code>
 to get their values.</p>
-<div class="sourceCode" id="cb4"><pre
-class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- for mandatory fields: </span></span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- for mandatory fields: </span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- throw an error if not present</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ot">field ::</span> <span class="dt">T</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>field pub a <span class="ot">=</span> </span>
@@ -156,8 +147,7 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a 
 by passing the string through Pandoc. I use it to render the “notes”
 field for some entries, but it can potentially be used for any field to
 get rid of diacritics or other syntax.</p>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">texToMarkdown ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">texToMarkdown ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>texToMarkdown s <span class="ot">=</span> </span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> result <span class="ot">=</span> runPure <span class="op">$</span> <span class="kw">do</span> </span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>          x <span class="ot">&lt;-</span> readLaTeX def (T.pack s) </span>
@@ -166,7 +156,7 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a 
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Left</span> e <span class="ot">-&gt;</span> </span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">error</span> <span class="op">$</span> <span class="st">&quot;error reading latex commands in the string &quot;</span> </span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                  <span class="op">&lt;&gt;</span> <span class="fu">show</span> s <span class="op">&lt;&gt;</span> <span class="st">&quot;:\n&quot;</span> <span class="op">&lt;&gt;</span> <span class="fu">show</span> e</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        (<span class="dt">Right</span> s&#39;) <span class="ot">-&gt;</span> T.unpack (T.strip s&#39;) <span class="op">&lt;&gt;</span> <span class="st">&quot;. &quot;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        (<span class="dt">Right</span> s') <span class="ot">-&gt;</span> T.unpack (T.strip s') <span class="op">&lt;&gt;</span> <span class="st">&quot;. &quot;</span></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>makelink s <span class="ot">=</span> <span class="st">&quot;[&quot;</span> <span class="op">&lt;&gt;</span> s <span class="op">&lt;&gt;</span> <span class="st">&quot;](&quot;</span> <span class="op">&lt;&gt;</span> s <span class="op">&lt;&gt;</span> <span class="st">&quot;). &quot;</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
@@ -175,8 +165,7 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a 
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>maybeToStr (<span class="dt">Just</span> s) <span class="ot">=</span> s</span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>maybeToStr <span class="dt">Nothing</span>  <span class="ot">=</span> <span class="st">&quot;&quot;</span></span></code></pre></div>
 <p>Finally, here is how we can implement the formatters:</p>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>formatArticle pub <span class="ot">=</span>  field pub <span class="st">&quot;author&quot;</span> </span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>formatArticle pub <span class="ot">=</span>  field pub <span class="st">&quot;author&quot;</span> </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                  <span class="op">&lt;&gt;</span> <span class="st">&quot;. (&quot;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                  <span class="op">&lt;&gt;</span> field pub <span class="st">&quot;year&quot;</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                  <span class="op">&lt;&gt;</span> <span class="st">&quot;) \&quot;&quot;</span> </span>
@@ -211,16 +200,12 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a 
 using <code>fmap</code> and <code>&lt;|&gt;</code> operators, and I
 think it looks acceptable in the end.</p>
 <h1 id="use-it-yourself">Use it yourself</h1>
-<p>The source file for this post is available <a
-href="https://github.com/EgorLappo/egorlappo.github.io/blob/master/Bib.hs">here</a>.
-A result of runnning this script can be seen at <a
-href="https://egorlappo.github.io">my homepage</a> (<a
-href="https://github.com/EgorLappo/egorlappo.github.io/">source</a>).</p>
+<p>The source file for this post is available <a href="https://github.com/EgorLappo/egorlappo.github.io/blob/master/Bib.hs">here</a>.
+A result of runnning this script can be seen at <a href="https://egorlappo.github.io">my homepage</a> (<a href="https://github.com/EgorLappo/egorlappo.github.io/">source</a>).</p>
 <p>To use it with Hakyll, you can use a <code>listField</code> to pass a
 list of references into a template. In the main file, you can do
 something like this:</p>
-<div class="sourceCode" id="cb7"><pre
-class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span> </span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span> </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    bibliography <span class="ot">&lt;-</span> publicationList <span class="st">&quot;pubs.bib&quot;</span> </span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    hakyllWith config <span class="op">$</span> <span class="kw">do</span> </span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">...</span></span>
@@ -229,10 +214,10 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a 
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            route <span class="op">$</span> setExtension <span class="st">&quot;html&quot;</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            compile <span class="op">$</span> <span class="kw">do</span></span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                <span class="op">...</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> bibliography&#39; <span class="ot">=</span> <span class="fu">mapM</span> makeItem bibliography</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> bibliography' <span class="ot">=</span> <span class="fu">mapM</span> makeItem bibliography</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                    bibCtx <span class="ot">=</span> field <span class="st">&quot;pub&quot;</span> (<span class="fu">return</span> <span class="op">.</span> itemBody)</span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> ctx <span class="ot">=</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                    listField <span class="st">&quot;bibliography&quot;</span> bibCtx bibliography&#39; <span class="ot">`mappend`</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                    listField <span class="st">&quot;bibliography&quot;</span> bibCtx bibliography' <span class="ot">`mappend`</span></span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                    <span class="op">...</span></span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                <span class="op">...</span></span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                getResourceBody</span>
