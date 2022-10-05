@@ -58,7 +58,8 @@ discovered that there is no simple copy-pastable solution for generating
 a list of publications from a <code>.bib</code> file. In this post I
 show a way to manually transform contents of a bibliography file into a
 nicely formatted markdown. You can copy my code and very quickly adapt
-it to your needs. The final result is available at …</p>
+it to your needs. The final result is available <a href="https://github.com/EgorLappo/egorlappo.github.io/blob/master/Bib.hs">on
+github</a>.</p>
 <p>When it comes to references, Pandoc does have built-in citation
 processing machinery, and it can be used with Hakyll to cite works in
 blog posts (see, for example, <a href="https://github.com/jaspervdj/hakyll-citeproc-example">this
@@ -200,9 +201,8 @@ get rid of diacritics or other syntax.</p>
 using <code>fmap</code> and <code>&lt;|&gt;</code> operators, and I
 think it looks acceptable in the end.</p>
 <h1 id="use-it-yourself">Use it yourself</h1>
-<p>The source file for this post is available at …. A result of runnning
-this script can be seen at <a href="https://egorlappo.github.io">my
-homepage</a>.</p>
+<p>The source file for this post is available <a href="https://github.com/EgorLappo/egorlappo.github.io/blob/master/Bib.hs">here</a>.
+A result of runnning this script can be seen at <a href="https://egorlappo.github.io">my homepage</a> (<a href="https://github.com/EgorLappo/egorlappo.github.io/">source</a>).</p>
 <p>To use it with Hakyll, you can use a <code>listField</code> to pass a
 list of references into a template. In the main file, you can do
 something like this:</p>
