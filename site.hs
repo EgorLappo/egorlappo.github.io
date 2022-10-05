@@ -31,7 +31,7 @@ main = do
             route $ setExtension "html"
             compile $ pandocCompilerWith blogReaderOptions blogWriterOptions
                 >>= loadAndApplyTemplate "templates/blogpost.html" postCtx
-                >>= relativizeUrls
+                -- >>= relativizeUrls
 
         match "blog.md" $ do
             route $ setExtension "html"
@@ -45,7 +45,7 @@ main = do
                     >>= applyAsTemplate blogCtx
                     >>= renderPandoc
                     >>= loadAndApplyTemplate "templates/default.html" blogCtx
-                    >>= relativizeUrls
+                    -- >>= relativizeUrls
 
         match "index.md" $ do
             route $ setExtension "html"
@@ -62,7 +62,7 @@ main = do
                     >>= applyAsTemplate indexCtx
                     >>= renderPandoc
                     >>= loadAndApplyTemplate "templates/default.html" indexCtx
-                    >>= relativizeUrls
+                    -- >>= relativizeUrls
 
         match "templates/*" $ compile templateCompiler
 

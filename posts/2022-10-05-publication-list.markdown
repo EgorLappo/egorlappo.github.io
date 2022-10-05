@@ -8,15 +8,15 @@ description: |
 
 While setting up my personal [page](https://egorlappo.github.io) with Hakyll, I have discovered that there is no simple copy-pastable solution for generating a list of publications from a `.bib` file. In this post I show a way to manually transform contents of a bibliography file into a nicely formatted markdown. You can copy my code and very quickly adapt it to your needs. The final result is available [on github](https://github.com/EgorLappo/egorlappo.github.io/blob/master/Bib.hs).
 
-When it comes to references, Pandoc does have built-in citation processing machinery, and it can be used with Hakyll to cite works in blog posts (see, for example, [this guide](https://github.com/jaspervdj/hakyll-citeproc-example). As for obtaining a plain publication list, the main suggestion seems to be to use an empty file containing a `\nocite{*}` command to make Pandoc list the references. 
+When it comes to references, Pandoc does have built-in citation processing machinery, and it can be used with Hakyll to cite works in blog posts (see, for example, [this guide](https://github.com/jaspervdj/hakyll-citeproc-example)). As for obtaining a plain publication list, the main suggestion seems to be to use an empty file containing a `\nocite{*}` command to make Pandoc list the references. 
 
-However, I have found that this method is impossible to customize! The basic requirements are: reverse chronological sorting of references and no "unique names", which means that repeated authot combinations should be written out in full. With biblatex, this can be solved with a combination of settings:
+However, I have found that this method is impossible to customize! The basic requirements are: reverse chronological sorting of references and no "unique names", which means that repeated author combinations should be written out in full. With biblatex, this can be solved with a combination of settings:
 
 ```latex
 \usepackage[backend=biber, style=numeric, sorting=ydnt, firstinits=true, uniquename=false]{biblatex}
 ```
 
-With Pandoc, this problem seems to require a manual approach. I will show the base code that you can adapt to process your specific bibliography. 
+With Pandoc, this problem seems to require a manual approach. I will show the basic code to process a personal bibliography. 
 
 # Setup
 
