@@ -23,7 +23,6 @@ executable website-hakyll
                        hakyll,
                        parsec,
                        pandoc,
-                       pandoc-types,
                        bibtex
   ghc-options:         -Wall
                        -Wcompat

@@ -16,12 +16,14 @@ $pub$
 
 $endfor$
 
-## Posts
+## Blog
+Here are the most recent articles I've written:
+
 $for(posts)$
 * [$title$]($url$) - $date$
 $endfor$
 
-…or you can find more in the [blog](/blog.html).
+You can find all my posts on the [blog page](/blog.html).
 
 ## Code
 

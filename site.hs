@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
-import           Hakyll
+import Hakyll
+import qualified Text.Pandoc as P
 
 import Bib (publicationList)
 
@@ -28,8 +29,7 @@ main = do
 
         match "posts/*" $ do
             route $ setExtension "html"
-            compile $ pandocCompiler
-                -- >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            compile $ pandocCompilerWith blogReaderOptions blogWriterOptions
                 >>= loadAndApplyTemplate "templates/blogpost.html" postCtx
                 >>= relativizeUrls
 
@@ -50,7 +50,7 @@ main = do
         match "index.md" $ do
             route $ setExtension "html"
             compile $ do
-                posts <- recentFirst =<< loadAll "posts/*"
+                posts <- fmap (take 5) (recentFirst =<< loadAll "posts/*")
                 let bibliography' = mapM makeItem bibliography
                     bibCtx = field "pub" (return . itemBody)
                 let indexCtx =
@@ -80,3 +80,22 @@ postCtx =
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext
 
+-- https://gisli.hamstur.is/2020/08/my-personal-hakyll-cheatsheet/#katex-to-render-latex-math
+blogReaderOptions :: P.ReaderOptions
+blogReaderOptions = 
+   defaultHakyllReaderOptions
+      {
+         P.readerExtensions = 
+            P.readerExtensions defaultHakyllReaderOptions <> P.extensionsFromList
+               [ 
+                 P.Ext_tex_math_single_backslash  -- TeX math btw (..) [..]
+               , P.Ext_tex_math_double_backslash  -- TeX math btw \(..\) \[..\]
+               , P.Ext_tex_math_dollars           -- TeX math between $..$ or $$..$$
+               , P.Ext_latex_macros               -- Parse LaTeX macro definitions (for math only)
+               , P.Ext_inline_code_attributes     -- Ext_inline_code_attributes
+               , P.Ext_abbreviations              -- PHP markdown extra abbreviation definitions
+               ]
+      }
+
+blogWriterOptions :: P.WriterOptions
+blogWriterOptions = P.def { P.writerHTMLMathMethod = P.MathJax "" }
