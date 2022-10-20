@@ -1,8 +1,23 @@
 body {
-    max-width: 700px;
+    max-width: 750px;
 }
 
 .content {
     font-size: 12pt;
     text-align: justify;
+}
+
+figure  {
+    text-align: center;
+}
+
+figcaption {
+    font-size: 12pt;
+    font-style: italic;
+}
+
+img {
+    /*set maximal image width to 375 pixels*/
+    max-width: 375px;
+    
 }

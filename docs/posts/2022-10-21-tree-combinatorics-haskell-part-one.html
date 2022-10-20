@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="@egorlappo" />
+        
+        <meta name="description" content="In this post I implement several simple results in phylogenetic combinatorics using Haskell" />
+        
+        <title>Egor Lappo - Combinatorics of phylogenetic trees in Haskell, Part I</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+        
+        <link rel="stylesheet" type="text/css" href="../css/main.css" />
+        <link rel="stylesheet" type="text/css" href="../css/blogpost.css" />
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css" integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js" integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <header>
+                    <nav>
+                        <a href="../">Home</a>
+                        <a href="../blog.html">Blog</a>
+                    </nav>
+                </header>
+            </div>
+            <div class="row">
+                <main role="main">
+                    <h2 class="display-5">Combinatorics of phylogenetic trees in Haskell, Part I</h2>
+
+                    
+                      <h3>Coalescent histories</h3>
+                    
+
+                    <div class="info">
+                        Posted on October 21, 2022
+
+                        
+                            by <a href="https://egorlappo.github.io">Egor Lappo</a>
+                        
+                    </div>
+
+                    <hr>
+
+                    <br>
+                    
+                    <div class="content">
+                        <p>In this series of posts, I want to put some of <a href="https://egorlappo.github.io">my</a> or <a href="https://rosenberglab.stanford.io">my collaborators’</a> results in
+combinatorics of trees in a concrete form. I want to show how
+mathematical theorems sometimes can be translated almost verbatim into
+Haskell code. In the first part, I will discuss the counting results
+about <em>coalescent histories</em>.</p>
+<p>For the necessary background to this post, please check out a
+<strong><a href="../posts/2022-10-20-gene-trees-species-trees.html">small
+introduction into phylogenetic trees</a></strong>. In that post, I have
+defined species and gene trees as focal objects of modern phylogenetics.
+The essence of it is that a species tree describes the natural history
+of speciation events for a group of species, and a gene tree represents
+the relationship between genetic lineages sampled from these species.
+So, the two trees are closely related, but at the same time they can
+have different shapes (topologies).</p>
+<p>A scientist would immediately pose an inference problem: “Can we
+learn about the species tree given a set of gene trees build from
+different chunks of DNA?”. That is a very valid question, and dozens of
+people are still working on in. A mathematician like me, however, wants
+to ask a different question: “Can we characterize the relationship
+between the two trees?”</p>
+<p>In my opinion, that’s an amazing question because it’s very easy to
+formalize and prove theorems about. So, let me give you one way to think
+rigorously about this situation. What is the thing we care about in gene
+trees? It’s the <em>coalescences</em>, i.e. the nodes of the tree, since
+these are the events we can “observe” from our data (sample). They are
+discrete events that happen in the timespan of one generation. In short,
+in gene trees, we care about the <em>nodes</em>.</p>
+<p>No one <em>really</em> observes real speciation events, except for
+some small-scale experiments. An event is usually declared a speciation
+only after the fact, when the two new species have sufficiently diverged
+from each other. So, in species trees, we care about the
+<em>edges</em>.</p>
+<p>Now, our collective brain suddenly clicks: coalescences of the gene
+tree happen <em>inside</em> branches of the species tree. This looks
+like a function! This leads us to the main definition of the post.</p>
+<p><strong>Definition.</strong> Consider a pair of trees <span class="math inline">\((G,S)\)</span> that are binary, rooted, and
+leaf-labeled, with the labels in bijective correspondence. Let <span class="math inline">\(G\)</span> be the gene tree and <span class="math inline">\(S\)</span> be the species tree. A <em>coalescent
+history</em> is a function <span class="math inline">\(\alpha\)</span>
+from the set of internal nodes of <span class="math inline">\(G\)</span>
+to the set of internal edges of <span class="math inline">\(S\)</span>,
+satisfying two conditions:</p>
+<ol type="a">
+<li><p>For each internal node <span class="math inline">\(v\)</span> in
+<span class="math inline">\(G\)</span>, all labels for leaves descended
+from <span class="math inline">\(v\)</span> in <span class="math inline">\(G\)</span> label leaves descended from edge <span class="math inline">\(\alpha(V)\)</span> in <span class="math inline">\(S\)</span>.</p></li>
+<li><p>For each pair of internal nodes <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span> in <span class="math inline">\(G\)</span>, if <span class="math inline">\(v_2\)</span> is descended from <span class="math inline">\(v_1\)</span>, then <span class="math inline">\(\alpha(v_2)\)</span> is descended from <span class="math inline">\(\alpha(v_1)\)</span> in <span class="math inline">\(S\)</span>.</p></li>
+</ol>
+<p>The conditions in this definition simply ensure that the tree
+“structure” is preserved: for example, ancestors cannot be mapped to an
+edge <em>below</em> their descendants. It is worth to take a minute to
+wrap your head around this definition. Here is a picture to help with
+it.</p>
+<figure>
+<img src="../images/coalescent_history_example_rosenberg_2007.png" alt="Figure 1. The species tree is shown in bold, and the gene tree is shown with thin gray lines. The coalescence of A and B is mapped to an edge of S directly above the corresponding node of S (labeled by 1). Many coalescences are mapped above the root of S. The figure is taken from Rosenberg (2007)" />
+<figcaption aria-hidden="true"><strong>Figure 1.</strong> The species
+tree is shown in bold, and the gene tree is shown with thin gray lines.
+The coalescence of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> is mapped to an edge of <span class="math inline">\(S\)</span> directly above the corresponding node
+of <span class="math inline">\(S\)</span> (labeled by <span class="math inline">\(1\)</span>). Many coalescences are mapped above
+the root of <span class="math inline">\(S\)</span>. The figure is taken
+from <a href="http://rosenberglab.stanford.edu/papers/Rosenberg2007-JCB.pdf">Rosenberg
+(2007)</a></figcaption>
+</figure>
+<h3 id="matching-case">Matching case</h3>
+<p><strong>How many coalescent histories are there?</strong> We are
+going to answer this counting question. Thankfully, all math has already
+been done for us by Professor Rosenberg. Let’s see what he says in his
+paper titled <em>“Counting coalescent histories”</em>.</p>
+<p><strong>Theorem.</strong> (Theorem 3.1, <a href="http://rosenberglab.stanford.edu/papers/Rosenberg2007-JCB.pdf">Rosenberg
+(2007)</a>) <em>For <span class="math inline">\(m \geq 1\)</span> , the
+number of valid <span class="math inline">\(m\)</span>-extended
+coalescent histories for a tree <span class="math inline">\(S\)</span>
+with <span class="math inline">\(n \geq 2\)</span> taxa is</em></p>
+<p><span class="math display">\[A_{S,m} = \sum_{k=1}^m A_{S_L, k+1}
+A_{S_R,k+1},\]</span></p>
+<p><em>where <span class="math inline">\(S_L\)</span> and <span class="math inline">\(S_R\)</span> respectively denote the left and
+right subtrees of <span class="math inline">\(S\)</span>. If <span class="math inline">\(S\)</span> has <span class="math inline">\(n =
+1\)</span> taxon, then <span class="math inline">\(A_{S,m} = 1\)</span>
+for all <span class="math inline">\(m\)</span>.</em></p>
+<p>Okay, let’s figure it all out: what are <em><span class="math inline">\(m\)</span>-extended coalescent histories</em>?
+These are just the regular coalescent histories, but we subdivide the
+root of the species <span class="math inline">\(S\)</span> artificially
+into <span class="math inline">\(m\)</span> different edges. You can
+actually see this in Figure 1 above.</p>
+<p>Okay, but why do we only have one tree here? This is actually the
+result for the case when the species tree and gene tree
+<strong>do</strong> have the same topology. I will cover the general
+result below.</p>
+<p>Okay, okay, so the answer is just a recursive function? Yes, exactly!
+Trees are by their nature recursive structures, so it’s no surprise we
+got this answer. The base case is when the tree has a single leaf edge,
+no matter how many branches we have subdivided it into, and the big
+equation defines the recursive case.</p>
+<p>Great, so what are the values of this function? Let’s find that out!
+We are finally ready to code this function.</p>
+<p>The final result of this section is available in the companion
+repository: <a href="https://github.com/EgorLappo/tree_combinatorics_functions">github.com/EgorLappo/tree_combinatorics_functions</a>.
+It includes a small parser, allowing conversion between Haskell trees
+and string representations with <code>parseString</code>, and a
+rudimentary pretty-printing of trees in the form of a custom
+<code>Show</code> instance.</p>
+<p>Let’s begin. Since I am using Haskell, I will start with defining our
+types. Here it is:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Tree</span> a <span class="ot">=</span> <span class="dt">Leaf</span> a <span class="op">|</span> <span class="dt">Node</span> a (<span class="dt">Tree</span> a) (<span class="dt">Tree</span> a) <span class="kw">deriving</span> <span class="dt">Eq</span></span></code></pre></div>
+<p>There are many helper functions that we may need in the future, and
+all of them are located in <a href="https://github.com/EgorLappo/tree_combinatorics_functions/blob/master/src/Tree.hs">this
+file</a>. I won’t reproduce all of them here, but here is an example
+function:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- get all leaf labels</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ot">leafLabels ::</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> [a]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>leafLabels (<span class="dt">Leaf</span> a) <span class="ot">=</span> [a]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>leafLabels (<span class="dt">Node</span> _ l r) <span class="ot">=</span> leafLabels l <span class="op">++</span> leafLabels r</span></code></pre></div>
+<p>The theorem I am implementing is actually talking about <em>extended
+trees</em> that have a subdivided root edge. Here is the corresponding
+definition.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- data type for m-extended trees</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- an extra `Int` records the subdivision of the branch</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">ExtTree</span> a <span class="ot">=</span> <span class="dt">Leaf</span> <span class="dt">Int</span> a <span class="op">|</span> <span class="dt">Node</span> <span class="dt">Int</span> a (<span class="dt">ExtTree</span> a) (<span class="dt">ExtTree</span> a)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ot">fromTree ::</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="dt">ExtTree</span> a</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>fromTree (<span class="dt">T.Leaf</span> a) <span class="ot">=</span> <span class="dt">Leaf</span> <span class="dv">1</span> a <span class="co">-- kind of unnecessary in practice...</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>fromTree (<span class="dt">T.Node</span> a l r) <span class="ot">=</span> <span class="dt">Node</span> <span class="dv">1</span> a (fromTree l) (fromTree r)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ot">toTree ::</span> <span class="dt">ExtTree</span> a <span class="ot">-&gt;</span> <span class="dt">Tree</span> a</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>toTree (<span class="dt">Leaf</span> _ a) <span class="ot">=</span> <span class="dt">T.Leaf</span> a</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>toTree (<span class="dt">Node</span> _ a l r) <span class="ot">=</span> <span class="dt">T.Node</span> a (toTree l) (toTree r)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="ot">labelExt ::</span> <span class="dt">ExtTree</span> a <span class="ot">-&gt;</span> a</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>labelExt (<span class="dt">Leaf</span> _ a) <span class="ot">=</span> a</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>labelExt (<span class="dt">Node</span> _ a _ _) <span class="ot">=</span> a</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="ot">relabelExt ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">ExtTree</span> a <span class="ot">-&gt;</span> <span class="dt">ExtTree</span> a</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>relabelExt k (<span class="dt">Leaf</span> _ a) <span class="ot">=</span> <span class="dt">Leaf</span> k a</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>relabelExt k (<span class="dt">Node</span> _ a l r) <span class="ot">=</span> <span class="dt">Node</span> k a l r</span></code></pre></div>
+<p>Here I have defined a new type of trees, <code>ExtTree</code>, that
+keep information about branch subdivisions. There is also a pair of
+<em>natural transformations</em> between the regular <code>Tree</code>s
+and <code>ExtTree</code>s, as well as very important helper functions
+that work with numberings and labels of the tree root.</p>
+<p>With this small bit of preparation, the theorem takes just a few
+lines:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- helper to match the type</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ot">countMatchingCoalescentHistories ::</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>countMatchingCoalescentHistories <span class="ot">=</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  countMatchingCoalescentHistories' <span class="op">.</span> fromTree</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- Rosenberg (2007), Thm 3.1</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ot">countMatchingCoalescentHistories' ::</span> <span class="dt">ExtTree</span> a <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>countMatchingCoalescentHistories' (<span class="dt">Leaf</span> _ _) <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>countMatchingCoalescentHistories' (<span class="dt">Node</span> m _ l r) <span class="ot">=</span> (<span class="fu">sum</span> <span class="op">.</span> <span class="fu">zipWith</span> (<span class="op">*</span>)) aL aR</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> sLs <span class="ot">=</span> [relabelExt (k<span class="op">+</span><span class="dv">1</span>) l <span class="op">|</span> k <span class="ot">&lt;-</span> [<span class="dv">1</span><span class="op">..</span>m]]</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        sRs <span class="ot">=</span> [relabelExt (k<span class="op">+</span><span class="dv">1</span>) r <span class="op">|</span> k <span class="ot">&lt;-</span> [<span class="dv">1</span><span class="op">..</span>m]]</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        aL <span class="ot">=</span> <span class="fu">map</span> countMatchingCoalescentHistories' sLs</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        aR <span class="ot">=</span> <span class="fu">map</span> countMatchingCoalescentHistories' sRs</span></code></pre></div>
+<p>If you know Haskell syntax, this function should be barely different
+from the plain-text statement of the theorem. If the tree is a
+<code>Leaf</code> (with any label and subdivision), the result is just
+<span class="math inline">\(1\)</span>. If we have a node instead, we
+compute the recursive cases and combine them. The
+<code>sum . zipWith (*)</code> function is responsible for the
+aggregation of the values computed on subtrees. The values recursively
+computes values are <code>aR</code> and <code>aL</code>. They are
+computed by applying our function to left and right subtrees that have
+been <em>extended</em> by <code>k+1</code>, just as in the statement of
+the theorem. Note that by using <code>fromTree</code>, we make sure that
+we count <span class="math inline">\(1\)</span>-extended coalescent
+histories when we call <code>countMatchingCoalescentHistories</code>,
+which is exactly what we were after.</p>
+<p>Ok, great! This was simple and easy. Let’s use it to generate some
+numbers!</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="kw">let</span> trees <span class="ot">=</span> <span class="fu">map</span> parseString [<span class="st">&quot;(a,b)&quot;</span>, <span class="st">&quot;((a,b),c)&quot;</span>, <span class="st">&quot;(((a,b),c),d)&quot;</span>, <span class="st">&quot;((((a,b),c),d),e)&quot;</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="fu">map</span> countMatchingCoalescentHistories trees</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">14</span>]</span></code></pre></div>
+<p>The numbers 1, 2, 5, 14 are the very famous <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan numbers</a>!
+They appear naturally as the number of coalescent histories for
+“catepillar” trees.</p>
+<h3 id="nonmatching-case">Nonmatching case</h3>
+<p>Now let’s do the harder case in which the shape of the gene tree is
+different from the species tree. We have to consult the paper by
+Dr. Rosenberg once again.</p>
+<p><strong>Definition</strong> (Def. 4.1, <a href="http://rosenberglab.stanford.edu/papers/Rosenberg2007-JCB.pdf">Rosenberg
+(2007)</a>). <em>For a tree <span class="math inline">\(S\)</span> with
+<span class="math inline">\(n \geq 2\)</span> taxa and a tree <span class="math inline">\(G\)</span> whose taxa are a subset of those of
+<span class="math inline">\(S\)</span>, let <span class="math inline">\(T(G,S)\)</span> denote the minimal displayed tree
+of <span class="math inline">\(S\)</span> that is induced by the taxa of
+<span class="math inline">\(G\)</span>.</em></p>
+<p><strong>Definition</strong> (Def. 4.2, <a href="http://rosenberglab.stanford.edu/papers/Rosenberg2007-JCB.pdf">Rosenberg
+(2007)</a>). <em>For a tree <span class="math inline">\(S\)</span> with
+<span class="math inline">\(n \geq 2\)</span> taxa and a tree <span class="math inline">\(G\)</span> whose taxa are a subset of those of
+<span class="math inline">\(S\)</span>, let <span class="math inline">\(d(G,S)\)</span> denote the number of branches of
+<span class="math inline">\(S\)</span> that separate the root of <span class="math inline">\(S\)</span> from the root of <span class="math inline">\(T(G,S)\)</span>. For a given tree <span class="math inline">\(S\)</span>, considering all possible trees <span class="math inline">\(G\)</span> whose taxa form a subset of those of
+<span class="math inline">\(S\)</span>, the value of <span class="math inline">\(d(G,S)\)</span> ranges from <span class="math inline">\(0\)</span> to the largest number of branches
+separating a leaf from the root of <span class="math inline">\(S\)</span>.</em></p>
+<p><strong>Theorem</strong> (Thm. 4.3, <a href="http://rosenberglab.stanford.edu/papers/Rosenberg2007-JCB.pdf">Rosenberg
+(2007)</a>) <em>For <span class="math inline">\(m \geq 1\)</span>, the
+number of valid <span class="math inline">\(m\)</span>-extended
+coalescent histories for a species tree labeled topology <span class="math inline">\(S\)</span> with <span class="math inline">\(n \geq
+2\)</span> taxa and a gene tree labeled topology <span class="math inline">\(G\)</span> whose taxa are a subset of those of
+<span class="math inline">\(S\)</span> is</em></p>
+<p><span class="math display">\[ B_{G,S,m} = \sum_{k=1}^m B_{G_L,
+T(G_L,S),k+d(G_L,S)} B_{G_R, T(G_R,S),k+d(G_R,S)}\]</span></p>
+<p><em>where <span class="math inline">\(G_L\)</span> and <span class="math inline">\(G_R\)</span> respectively denote the left and
+right subtrees of <span class="math inline">\(G\)</span>. If <span class="math inline">\(n = 1\)</span> or <span class="math inline">\(G\)</span> has only one taxon, then <span class="math inline">\(B_{G,S,m} = 1\)</span> for all <span class="math inline">\(m\)</span>.</em></p>
+<p>Wow, this no longer looks like a simple recursion! Let’s first
+understand all the new terms. The function <span class="math inline">\(T(G,S)\)</span> intuitively corresponds to the
+following operation: find all the leaves in <span class="math inline">\(G\)</span> among the leaf labels of <span class="math inline">\(S\)</span>, and then return the tree “below” the
+most recent common ancestor of these leaves in <span class="math inline">\(S\)</span>. The point here is that <span class="math inline">\(T(G,S)\)</span> may contain other leaves that are
+not part of <span class="math inline">\(G\)</span>. For example, take
+<span class="math inline">\(G=(a,c)\)</span> and <span class="math inline">\(S=((a,b),c)\)</span>. Then, <span class="math inline">\(T(G,S) = S\)</span> (think through this!).</p>
+<p>The function <span class="math inline">\(d(G,S)\)</span> is pretty
+self explanatory. It determines how many extra subdivisions of branches
+we need to introduce to account for nonmatching topologies.</p>
+<p>It turns out that, despite having two different trees here, we are
+still recursing on the <em>gene tree</em> <span class="math inline">\(G\)</span>. The species tree plays an auxiliary
+function, letting us compute <span class="math inline">\(T(G,S)\)</span>
+and <span class="math inline">\(d(G,S)\)</span>. So, it must be possible
+to elegantly express this with Haskell.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">countNonmatchingCoalescentHistories ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="dt">Tree</span> a<span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>countNonmatchingCoalescentHistories g s </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> countNonmatchingCoalescentHistories' (fromTree g) (fromTree s)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ot">countNonmatchingCoalescentHistories' ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> <span class="dt">ExtTree</span> a <span class="ot">-&gt;</span> <span class="dt">ExtTree</span> a <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>countNonmatchingCoalescentHistories' (<span class="dt">Leaf</span> _ _) _ <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>countNonmatchingCoalescentHistories' _ (<span class="dt">Leaf</span> _ _) <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>countNonmatchingCoalescentHistories' (<span class="dt">Node</span> _ _ gl gr) s<span class="op">@</span>(<span class="dt">Node</span> m _ _ _) </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="fu">sum</span> <span class="op">$</span> <span class="fu">zipWith</span> (<span class="op">*</span>) bL bR</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>       tl <span class="ot">=</span> (fromTree <span class="op">.</span> mrcaNode (toTree s) <span class="op">.</span> leafLabels <span class="op">.</span> toTree) gl</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>       tr <span class="ot">=</span> (fromTree <span class="op">.</span> mrcaNode (toTree s) <span class="op">.</span> leafLabels <span class="op">.</span> toTree) gr</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>       dl <span class="ot">=</span> <span class="fu">length</span> <span class="op">$</span> ancestorNodes (labelExt tl) (toTree s)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>       dr <span class="ot">=</span> <span class="fu">length</span> <span class="op">$</span> ancestorNodes (labelExt tr) (toTree s)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>       bL <span class="ot">=</span> [countNonmatchingCoalescentHistories' gl (relabelExt (k <span class="op">+</span> dl) tl) <span class="op">|</span> k <span class="ot">&lt;-</span> [<span class="dv">1</span><span class="op">..</span>m]]</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>       bR <span class="ot">=</span> [countNonmatchingCoalescentHistories' gr (relabelExt (k <span class="op">+</span> dr) tr) <span class="op">|</span> k <span class="ot">&lt;-</span> [<span class="dv">1</span><span class="op">..</span>m]]</span></code></pre></div>
+<p>This is quite a bit more involved than the matching case, but we can
+still get through it! The first thing to notice is that now we have two
+“terminating” cases for the recursion: one for <span class="math inline">\(G\)</span> and one for <span class="math inline">\(S\)</span>.</p>
+<p>The second thing is that the structure of the function is the same:
+there is the “aggregation pattern” <code>sum . zipWith (*)</code> and
+recursively computed values in lists <code>bL</code> and
+<code>bR</code>.</p>
+<p>To compute <span class="math inline">\(T(G,S)\)</span>, I compose two
+functions:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>t g s <span class="ot">=</span> mrcaNode s (leafLabels g)</span></code></pre></div>
+<p>First, get the leaf labels of <code>g</code>, and then find their
+most recent common ancestor in <code>s</code> – done! I just need to
+wrap this with tree transformations to make the helper functions work
+with the extended tree type. To compute <span class="math inline">\(d(G,S)\)</span> I compute the length of the chain
+of ancestors from the root node of <span class="math inline">\(T(G,S)\)</span> to the root of <span class="math inline">\(S\)</span>, also using a helper function.</p>
+<p>The function <code>leafLabels</code>, <code>mrcaNode</code>, and
+others can be found in <a href="https://github.com/EgorLappo/tree_combinatorics_functions/blob/master/src/Tree.hs">this
+file</a>.</p>
+<p>You can try downloading my repository and running the code yourself!
+Try to find some more interesting number sequences using the nonmatching
+function. I hope this little tutorial was useful!</p>
+                    </div>
+                    
+                    
+                </main>
+            </div>
+
+            <div class="row">
+                <footer>
+                    Site proudly generated by
+                    <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>
