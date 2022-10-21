@@ -21,3 +21,7 @@ img {
     max-width: 375px;
     
 }
+
+.katex {
+    font-size: 1em !important;
+}

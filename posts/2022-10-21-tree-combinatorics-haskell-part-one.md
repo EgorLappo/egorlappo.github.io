@@ -26,7 +26,7 @@ Now, our collective brain suddenly clicks: coalescences of the gene tree happen 
 
 The conditions in this definition simply ensure that the tree "structure" is preserved: for example, ancestors cannot be mapped to an edge _below_ their descendants. It is worth to take a minute to wrap your head around this definition. Here is a picture to help with it.
 
-![**Figure 1.** The species tree is shown in bold, and the gene tree is shown with thin gray lines. The coalescence of $A$ and $B$ is mapped to an edge of $S$ directly above the corresponding node of $S$ (labeled by $1$). Many coalescences are mapped above the root of $S$. The figure is taken from [Rosenberg (2007)](http://rosenberglab.stanford.edu/papers/Rosenberg2007-JCB.pdf)](/images/blg/tree_posts/coalescent_history_example_rosenberg_2007.png)
+![**Figure 1.** The species tree is shown in bold, and the gene tree is shown with thin gray lines. The coalescence of $A$ and $B$ is mapped to an edge of $S$ directly above the corresponding node of $S$ (labeled by $1$). Many coalescences are mapped above the root of $S$. The figure is taken from [Rosenberg (2007)](http://rosenberglab.stanford.edu/papers/Rosenberg2007-JCB.pdf)](/images/blog/tree_posts/coalescent_history_example_rosenberg_2007.png)
 
 
 ### Matching case
