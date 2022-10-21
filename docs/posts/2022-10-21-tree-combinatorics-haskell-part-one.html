@@ -185,11 +185,12 @@ definition.</p>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="ot">relabelExt ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">ExtTree</span> a <span class="ot">-&gt;</span> <span class="dt">ExtTree</span> a</span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>relabelExt k (<span class="dt">Leaf</span> _ a) <span class="ot">=</span> <span class="dt">Leaf</span> k a</span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>relabelExt k (<span class="dt">Node</span> _ a l r) <span class="ot">=</span> <span class="dt">Node</span> k a l r</span></code></pre></div>
-<p>Here I have defined a new type of trees, <code>ExtTree</code>, that
-keep information about branch subdivisions. There is also a pair of
-<em>natural transformations</em> between the regular <code>Tree</code>s
-and <code>ExtTree</code>s, as well as very important helper functions
-that work with numberings and labels of the tree root.</p>
+<p>I have defined a new type of trees, <code>ExtTree</code>, that keep
+information about branch subdivisions as an integer. There is also a
+pair of <em>natural transformations</em> between the regular
+<code>Tree</code>s and <code>ExtTree</code>s, as well as very important
+helper functions that work with numberings and labels of the tree
+root.</p>
 <p>With this small bit of preparation, the theorem takes just a few
 lines:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- helper to match the type</span></span>

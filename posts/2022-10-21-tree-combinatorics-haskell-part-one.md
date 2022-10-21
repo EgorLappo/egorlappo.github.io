@@ -88,7 +88,7 @@ relabelExt k (Leaf _ a) = Leaf k a
 relabelExt k (Node _ a l r) = Node k a l r
 ```
 
-Here I have defined a new type of trees, `ExtTree`, that keep information about branch subdivisions. There is also a pair of _natural transformations_ between the regular `Tree`s and `ExtTree`s, as well as very important helper functions that work with numberings and labels of the tree root. 
+I have defined a new type of trees, `ExtTree`, that keep information about branch subdivisions as an integer. There is also a pair of _natural transformations_ between the regular `Tree`s and `ExtTree`s, as well as very important helper functions that work with numberings and labels of the tree root. 
 
 With this small bit of preparation, the theorem takes just a few lines: 
 
