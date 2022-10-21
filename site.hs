@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
 import Hakyll
+
 import qualified Text.Pandoc as P
 
 import Bib (publicationList)
@@ -15,6 +16,10 @@ main :: IO ()
 main = do 
     bibliography <- publicationList "pubs.bib" 
     hakyllWith config $ do
+        match "CNAME" $ do
+            route   idRoute
+            compile copyFileCompiler
+
         match "images/*" $ do
             route   idRoute
             compile copyFileCompiler
