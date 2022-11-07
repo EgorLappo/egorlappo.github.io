@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="@egorlappo" />
+        
+        <meta name="description" content="In this post I implement more simple results in phylogenetic combinatorics using Haskell" />
+        
+        <title>Egor Lappo - Combinatorics of phylogenetic trees in Haskell, Part II</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+        
+        <link rel="stylesheet" type="text/css" href="../css/main.css" />
+        <link rel="stylesheet" type="text/css" href="../css/blogpost.css" />
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css" integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js" integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <header>
+                    <nav>
+                        <a href="../">Home</a>
+                        <a href="../blog.html">Blog</a>
+                    </nav>
+                </header>
+            </div>
+            <div class="row">
+                <main role="main">
+                    <h2 class="display-5">Combinatorics of phylogenetic trees in Haskell, Part II</h2>
+
+                    
+                      <h3>Ancestral configurations</h3>
+                    
+
+                    <div class="info">
+                        Posted on November  7, 2022
+
+                        
+                            by <a href="https://egorlappo.github.io">Egor Lappo</a>
+                        
+                    </div>
+
+                    <hr>
+
+                    <br>
+                    
+                    <div class="content">
+                        <p><em>Check out <strong><a href="../posts/2022-10-21-tree-combinatorics-haskell-part-one.html">Part
+I</a></strong> of this series first!</em></p>
+<p>For the necessary background to this post, please read a <strong><a href="../posts/2022-10-20-gene-trees-species-trees.html">small
+introduction into phylogenetic trees</a></strong>. In that post, I have
+defined species and gene trees as focal objects of modern phylogenetics.
+The essence of it is that a species tree describes the natural history
+of speciation events for a group of species, and a gene tree represents
+the relationship between genetic lineages sampled from these species.
+So, the two trees are closely related, but at the same time they can
+have different shapes (topologies).</p>
+<p>In this post, I will offer another mathematical perspective on the
+relationship between gene and species trees: <em>ancestral
+configuration</em>. We will once again consult the papers for
+definitions and theorems, and then implement this structure with
+Haskell.</p>
+<p>Coalescent histories were essentially maps from nodes of the gene
+tree into the branches of the species tree that satisfy some natural
+conditions. Ancestral configurations are not maps but <em>sets of
+lineages</em>, i.e. sets of edges of the gene tree.</p>
+<p>To define ancestral configurations, we need to talk about
+realizations. Given a gene tree <span class="math inline">\(G\)</span>
+and a species tree <span class="math inline">\(S\)</span>, a
+<em>realization</em> <span class="math inline">\(R\)</span> of <span class="math inline">\(G\)</span> in <span class="math inline">\(S\)</span> is essentially a juxtaposition of the
+“thin” tree <span class="math inline">\(G\)</span> with the “thick” tree
+<span class="math inline">\(S\)</span>, just like in the illustration of
+the multispecies coalescent from the <a href="../posts/2022-10-20-gene-trees-species-trees.html">introductory
+blogpost</a>. Here is how it looks:</p>
+<figure>
+<img src="../images/blog/tree_posts/realizations.png" alt="Figure 1 Two example realizations of G in S. The gene tree G is shown in gray, and the species tree S is shown in black. The nodes of the species tree are represented by horzontal dashed lines." />
+<figcaption aria-hidden="true"><strong>Figure 1</strong> Two example
+realizations of <span class="math inline">\(G\)</span> in <span class="math inline">\(S\)</span>. The gene tree <span class="math inline">\(G\)</span> is shown in gray, and the species tree
+<span class="math inline">\(S\)</span> is shown in black. The nodes of
+the species tree are represented by horzontal dashed lines.</figcaption>
+</figure>
+<p>In these pictures we are interested in what happens at each node of
+the species tree. The horizontal lines representing nodes of <span class="math inline">\(S\)</span> intersect some number of lineages
+(edges) of <span class="math inline">\(G\)</span>. The set of lineages
+of <span class="math inline">\(G\)</span> intersecting a given node
+<span class="math inline">\(v\)</span> of <span class="math inline">\(S\)</span> is called an <em>ancestral
+configuration at <span class="math inline">\(v\)</span></em>.</p>
+<p>The set of ancestral configurations at <span class="math inline">\(v\)</span> is denoted <span class="math inline">\(C(G,S,v)\)</span>. We are particularly interested
+in <em>root ancestral configurations</em> <span class="math inline">\(C(G,S,r)\)</span>. Let’s further restrict
+ourselves to the case <span class="math inline">\(G=S\)</span> and let
+<span class="math inline">\(C(S) = C(S,S,r)\)</span> be the set of root
+ancestral configurations of <span class="math inline">\(S\)</span>. For
+example, looking at Figure 1, we can see that in (A) the root ancestral
+configuration is <span class="math inline">\(\{g,d,e\} \in
+C(S)\)</span>, and in <span class="math inline">\(B\)</span> it is <span class="math inline">\(\{f,c,h\} \in C(S)\)</span>. (Here I have labeled
+each lineage/edge using the same label as a node right below that edge.)
+For an extended definition, you can take a look at <a href="https://doi.org/10.48550/arxiv.2111.10456">this paper</a>.</p>
+<p>What can we say about the set <span class="math inline">\(C(S)\)</span>? <a href="https://rosenberglab.stanford.edu/papers/DisantoRosenberg2017-JCompBiol.pdf">Disanto
+&amp; Rosenberg (2017)</a> have an answer for us!</p>
+<p>Given a tree <span class="math inline">\(S\)</span>, let <span class="math inline">\(\ell\)</span> and <span class="math inline">\(r\)</span> be the left and right root lineages
+(lineages adjacent to the root of <span class="math inline">\(S\)</span>. Also, let <span class="math inline">\(S|_\ell\)</span> be the left root subtree, and
+<span class="math inline">\(S|_r\)</span> be the right root subtree.
+Then, the authors prove the following result about <span class="math inline">\(C(S)\)</span>:</p>
+<p><span class="math display">\[ C(S) = \{\{\ell,r\}\}\bigcup
+\left[C(S|_\ell) \otimes \{\{r\}\}\right] \bigcup \left[\{\{\ell\}\}
+\otimes C(S|_r)\right] \bigcup \left[C(S|_\ell)\otimes C(S|_r)\right],
+\]</span></p>
+<p>where <span class="math inline">\(A\otimes B = \{a\cup b \mid a \in
+A, b\in B\}\)</span> for <em>sets of sets</em> <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. Dealing with sets of sets is never
+simple, so the notation sucks. It’s okay though, we still will turn this
+into beautiful code.</p>
+<h3 id="the-coding-part">The coding part</h3>
+<p>Ok, so we have our definitions and a result that we want to
+implement. We also already have a type for trees from part I:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Tree</span> a <span class="ot">=</span> <span class="dt">Leaf</span> a <span class="op">|</span> <span class="dt">Node</span> a (<span class="dt">Tree</span> a) (<span class="dt">Tree</span> a) <span class="kw">deriving</span> <span class="dt">Eq</span></span></code></pre></div>
+<p>Given some <code>Tree a</code>, we will represent the set of
+ancestral configurations as <code>[[a]]</code>, which roughly
+corresponds to sets of sets above. With this, implementing the equation
+above is very simple.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">rootConfigurations ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> [[a]]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>rootConfigurations (<span class="dt">Leaf</span> _) <span class="ot">=</span> []</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>rootConfigurations (<span class="dt">Node</span> _ l r) <span class="ot">=</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    [[label l, label r]]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a> <span class="op">++</span> [label l <span class="op">:</span> rs <span class="op">|</span> rs <span class="ot">&lt;-</span> rootConfigurations r]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a> <span class="op">++</span> [ls <span class="op">++</span> [label r] <span class="op">|</span> ls <span class="ot">&lt;-</span> rootConfigurations l]</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> <span class="op">++</span> [ls <span class="op">++</span> rs <span class="op">|</span> ls <span class="ot">&lt;-</span> rootConfigurations l, rs <span class="ot">&lt;-</span> rootConfigurations r]</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ot">label ::</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> a</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>label (<span class="dt">Leaf</span> a) <span class="ot">=</span> a</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>label (<span class="dt">Node</span> a _ _) <span class="ot">=</span> a</span></code></pre></div>
+<p>We see the same four components, same structure, just with list
+concatenation instead of set union.</p>
+<p>I will leave you with some homework today: write a function</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">nonmatchingRootConfigurations ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> [[a]]</span></code></pre></div>
+<p>for a nonmatching pair! Hint: try to generate matching configurations
+for the gene tree <span class="math inline">\(G\)</span>, and omit those
+that do not “fit” with <span class="math inline">\(S\)</span>. For a
+solution see <a href="https://github.com/EgorLappo/tree_combinatorics_functions/blob/master/src/AncestralConfigurations.hs">this
+file</a> and a reference to my paper in the comment.</p>
+                    </div>
+                    
+                    
+                </main>
+            </div>
+
+            <div class="row">
+                <footer>
+                    Site proudly generated by
+                    <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>

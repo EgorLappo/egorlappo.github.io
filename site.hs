@@ -24,6 +24,10 @@ main = do
             route   idRoute
             compile copyFileCompiler
 
+        match "slides/**" $ do
+            route    idRoute
+            compile copyFileCompiler
+
         match "files/*" $ do
             route    idRoute
             compile copyFileCompiler
