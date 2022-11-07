@@ -104,7 +104,7 @@ texToMarkdown s =
                   <> show s <> ":\n" <> show e
         (Right s') -> T.unpack (T.strip s') <> ". "
 
-makelink s = "[" <> s <> "](" <> s <> "). "
+makelink s = "[" <> s <> "](https://" <> s <> "). "
 
 italicize s = "_" <> s <> "._ "
 

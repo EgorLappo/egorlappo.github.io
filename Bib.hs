@@ -69,7 +69,7 @@ formatUnpublished pub =  field pub "author"
                       
     
 makelink :: String -> String
-makelink s = "[" <> s <> "](" <> s <> "). "
+makelink s = "[" <> s <> "](https://doi.org/" <> s <> "). "
 
 italicize :: String -> String
 italicize s = "_" <> s <> "._ "
