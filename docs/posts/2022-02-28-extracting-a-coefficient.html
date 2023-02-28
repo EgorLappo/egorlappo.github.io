@@ -60,8 +60,8 @@ in the following form.</p>
 <p><em>Proposition 1.</em> Let <span class="math inline">\(U \in
 \mathbb{C}\)</span> be any domain such that <span class="math inline">\(0\in U\)</span>. Then</p>
 <p><span class="math display">\[
-\int_{\partial U} \frac{dz}{z^n} = \begin{cases} 2\pi i, &amp; $n=1$ \\
-0, &amp; \text{otherwise}. \end{cases}
+\int_{\partial U} \frac{dz}{z^n} = \begin{cases} 2\pi i, &amp; n=1 \\ 0,
+&amp; \text{otherwise}. \end{cases}
 \]</span></p>
 <p>So, suppose we have an analytic function <span class="math inline">\(f(z)\)</span> with a Taylor expansion <span class="math display">\[
 f(z) = \sum_{k=0}^\infty a_k z^k.
@@ -77,9 +77,8 @@ containing <span class="math inline">\(0\)</span>.</p>
 <p>When <span class="math inline">\(n = k\)</span>, the summand becomes
 <span class="math display">\[
 \frac{1}{2\pi i} \int_{U} \frac{a_n dz}{z} = a_n,
-\]</span> due to the first case in Proposition 1 above.</p>
-<p>When <span class="math inline">\(n \neq k\)</span>, the summand is
-zero, due to the second case in Proposition 1. We have shown that <span class="math display">\[
+\]</span> due to the first case in Proposition 1 above. When <span class="math inline">\(n \neq k\)</span>, the summand is zero, due to the
+second case in Proposition 1. So, we have shown that <span class="math display">\[
 a_k = \frac{1}{2\pi i} \int_{U} \frac{dz}{z^{n+1}} f(z).
 \]</span></p>
                     </div>

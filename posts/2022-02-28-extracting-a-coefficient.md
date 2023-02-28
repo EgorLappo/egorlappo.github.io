@@ -10,7 +10,7 @@ Sometimes, it is necessary to get an expression for the coefficient in the Taylo
 *Proposition 1.* Let $U \in \mathbb{C}$ be any domain such that $0\in U$. Then
 
 $$
-\int_{\partial U} \frac{dz}{z^n} = \begin{cases} 2\pi i, & $n=1$ \\ 0, & \text{otherwise}. \end{cases}
+\int_{\partial U} \frac{dz}{z^n} = \begin{cases} 2\pi i, & n=1 \\ 0, & \text{otherwise}. \end{cases}
 $$
 
 So, suppose we have an analytic function $f(z)$ with a Taylor expansion 
@@ -34,8 +34,7 @@ $$
 \frac{1}{2\pi i} \int_{U} \frac{a_n dz}{z} = a_n,
 $$
 due to the first case in Proposition 1 above.
-
-When $n \neq k$, the summand is zero, due to the second case in Proposition 1. We have shown that 
+When $n \neq k$, the summand is zero, due to the second case in Proposition 1. So, we have shown that 
 $$
 a_k = \frac{1}{2\pi i} \int_{U} \frac{dz}{z^{n+1}} f(z).
 $$
