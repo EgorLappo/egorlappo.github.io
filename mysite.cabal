@@ -1,0 +1,40 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.1.
+--
+-- see: https://github.com/sol/hpack
+
+name:           mysite
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/test#readme>
+homepage:       https://github.com/egorlappo/egorlappo.github.io#readme
+bug-reports:    https://github.com/egorlappo/egorlappo.github.io/issues
+author:         Egor Lappo
+maintainer:     egor@ccrma.stanford.edu
+copyright:      2023 Egor Lappo
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/egorlappo/egorlappo.github.io
+
+executable mysite-exe
+  main-is: Site.hs
+  other-modules:
+      Bib
+      Paths_mysite
+  hs-source-dirs:
+      ./
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , bibtex
+    , hakyll
+    , pandoc
+    , parsec
+    , text
+  default-language: Haskell2010
