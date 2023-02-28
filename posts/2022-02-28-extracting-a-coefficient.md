@@ -1,5 +1,5 @@
 ---
-title: Extracting coefficients of analytic function
+title: Extracting a coefficient of an analytic function
 subtitle: Using the Cauchy formula
 description: |
     In this post we show a way to extract a coefficient of an analytic function using the Cauchy formula.
