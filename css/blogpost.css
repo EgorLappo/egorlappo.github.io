@@ -7,7 +7,7 @@ body {
     text-align: justify;
 }
 
-figure  {
+figure {
     text-align: center;
 }
 
@@ -19,9 +19,13 @@ figcaption {
 img {
     /*set maximal image width to 375 pixels*/
     max-width: 375px;
-    
+
 }
 
 .katex {
     font-size: 1em !important;
+}
+
+.flickr-embed {
+    max-width: 100%;
 }
