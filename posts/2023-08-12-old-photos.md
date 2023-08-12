@@ -14,7 +14,7 @@ The first good photo was shot in Winter of 2016 on my trusty Olympus OM-2n with 
 
 The next one was taken I just bought my Bronica SQ-A with olympiad prize money. I used a 65mm f/4 lens and HP5+ to take it. The frozen lake on the photo is in the central park in Tula, my hometown.
 
-<a class="flickr-embed-link" data-flickr-embed="true" href="https://www.flickr.com/photos/elappo/53110104494/in/dateposted-public/" title="central park"><img src="https://live.staticflickr.com/65535/53110104494_74ebfda8ae_k.jpg" alt="central park"/>
+<a class="flickr-embed-link" data-flickr-embed="true" href="https://www.flickr.com/photos/elappo/53110104494/in/dateposted-public/" title="central park"><img src="https://live.staticflickr.com/65535/53110104494_74ebfda8ae_k.jpg" alt="central park"/></a>
 
 No one in Tula **really** knew how to process 120 color film, which resulted in several ruined rolls. I scanned them anyway and the results were one of the best photos I've ever taken. 
 
