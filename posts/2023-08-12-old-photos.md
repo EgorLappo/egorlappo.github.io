@@ -10,7 +10,7 @@ Recently I have decided to go through my old film scans from the time I was just
 
 The first good photo was shot in Winter of 2016 on my trusty Olympus OM-2n with a 50mm f/1.8 lens with CineStill 800T. I decided to leave the colors as-is, without correcting white balance, because it has better vibes this way.
 
-<a class="flickr-embed-link" data-flickr-embed="true" href="https://www.flickr.com/photos/elappo/53110312215/in/dateposted-public/" title="winter on the roof"><img src="https://live.staticflickr.com/65535/53110312215_2610b8edf4_k.jpg" alt="winter on the roof"/></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script>
+<a class="flickr-embed-link" data-flickr-embed="true" href="https://www.flickr.com/photos/elappo/53110312215/in/dateposted-public/" title="winter on the roof"><img src="https://live.staticflickr.com/65535/53110312215_2610b8edf4_k.jpg" alt="winter on the roof"/></a>
 
 The next one was taken I just bought my Bronica SQ-A with olympiad prize money. I used a 65mm f/4 lens and HP5+ to take it. The frozen lake on the photo is in the central park in Tula, my hometown.
 
