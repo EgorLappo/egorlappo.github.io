@@ -32,7 +32,7 @@ Exploring famous Bay Area photo spots with a new camera didn't quite work out fo
 
 <div class="flickr-embed"><a data-flickr-embed="true" href="https://www.flickr.com/photos/elappo/53139961108/in/album-72177720310714896/" title="img-46"><img class="flickr-img" src="https://live.staticflickr.com/65535/53139961108_99589550a1_k.jpg" alt="img-46"/></a></div>
 
-RZ 67 could also be a much cheaper Hasselblad XPan. These panoramas were shot using a 135 roll of HP5+, a 3D-printed adapter, and a 50mm lens. At some point I will scan these with sprocket holes to get the full picture.
+RZ 67 is also a much cheaper Hasselblad XPan alternatice. These panoramic photos were shot using a 135 roll of HP5+, a 3D-printed adapter, and a 50mm lens. At some point I will scan these with sprocket holes to get the full picture.
 
 <div class="flickr-embed"><a data-flickr-embed="true" href="https://www.flickr.com/photos/elappo/53139693994/in/album-72177720310714896/" title="img-13"><img class="flickr-img" src="https://live.staticflickr.com/65535/53139693994_a36842a7c6_k.jpg" alt="img-13"/></a></div>
 
