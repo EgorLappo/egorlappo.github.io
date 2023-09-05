@@ -1,0 +1,268 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<meta name="description" content="Why I think studying chess is interesting">
+	<meta name="author" content="Egor Lappo">
+
+	<title>berezkin files</title>
+
+	<link rel="stylesheet" href="revealjs/reset.css">
+	<link rel="stylesheet" href="revealjs/reveal.css">
+	<link rel="stylesheet" href="revealjs/theme/white.css">
+	<style>
+		iframe {
+			width: 1000px;
+			-webkit-transform: scale(0.7);
+			transform: scale(0.7);
+			-webkit-transform-origin: 0 0;
+			transform-origin: 0 0;
+
+		}
+	</style>
+
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<img src="2023-09-folklore-images/title.png" alt="Sirin and Alkonost by Vasnetsov"
+					style="height: 500px; border-radius: 2px;">
+				<h3>STRUCTURE IN ORAL TRADITIONS</h3>
+				<p>
+					<small>a global dataset of folklore motifs</small>
+				</p>
+				<p>
+					<small>Egor Lappo</small>
+				</p>
+			</section>
+
+			<section>
+				<!-- unite outline -->
+				<h3>Outline</h3>
+				<ol>
+					<li>Context</li>
+
+					<span class="fragment">
+						<li>Analysis with STRUCTURE</li>
+					</span>
+					<span class="fragment">
+						<li>Phylogenetic analysis</li>
+					</span>
+					<span class="fragment">
+						<li>Next steps</li>
+					</span>
+				</ol>
+			</section>
+
+			<section>
+				<section>
+					<h3>Who studies oral traditions?</h3>
+					<ul>
+						<div class="fragment">
+							<li>Folklorists, ethnographers, anthropologists</li>
+						</div>
+						<span class="fragment">
+							<li>Archaeologists, linguists, historians</li>
+						</span>
+						<span class="fragment">
+							<li>Cultural evolution researchers and biologists</li>
+						</span>
+					</ul>
+				</section>
+				<section>
+					<img src="2023-09-folklore-images/papers.png" alt="papers about folklore">
+				</section>
+				<section>
+					<p>Yuri Berezkin has created a global dataset that records presence-absence of folklore motifs among
+						<b>958</b> human cultures (societies).
+					</p>
+					<ul>
+						<li class="fragment">
+							<b>2564</b> motifs: image-motifs and episode-motifs
+
+							<small>
+								<ul>
+									<li class="fragment">
+										<b>The false wife</b>: An ugly, old, lazy, etc. woman or a male trickster comes
+										to man
+										under disguise of his wife, bride or sister who is driven out, confined to the
+										underworld, killed, etc.
+									</li>
+									<li class="fragment">
+										<b>Trickster-raven</b>: In episodes related to deception, absurd, obscene or
+										anti-social
+										behavior the protagonist is a raven.
+									</li>
+									<li class="fragment">
+										<b>Mankind ascends from the underworld</b>: The first people are not
+										created but come to earth from the underworld or from a small enclosure under
+										the earth
+										or on its surface.
+									</li>
+									<li class="fragment">
+										<b>The sun and the moon are males</b>: The Moon is male, the Sun is also male or
+										(much
+										more rare) asexual.
+									</li>
+									<li class="fragment"><b>Many others...</b></li>
+								</ul>
+							</small>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<p>Yuri Berezkin has created a global dataset that records presence-absence of folklore motifs among
+						<b>958</b> human cultures (societies).
+					</p>
+					<ul>
+						<li>
+							<b>2564</b> motifs: image-motifs and episode-motifs
+						</li>
+						<li>Ascertainment bias: motifs <b>must</b> be shared by at least two groups
+						</li>
+						<li class="fragment">More bias: "local" or "universal" motifs ignored</li>
+						<li class="fragment">Berezkin is not an expert, like me</li>
+					</ul>
+
+					<p class="fragment">
+						Some <em>PCA</em> and <em>NeighborNet</em> analyses have been done.
+					</p>
+				</section>
+			</section>
+			<section>
+				<section>
+					<p>Main metaphor:</p>
+
+					<p class="fragment">groups are <em>samples </em> and motifs are <em>alleles</em></p>
+
+					<p class="fragment">Run STRUCTURE on the data - mixed-membership clustering.</p>
+				</section>
+
+				<section>
+					<img class="r-stretch" src="2023-09-folklore-images/cluster_alignment.png"
+						alt="cluster alignment at varying K">
+				</section>
+				<section>
+					<img class="r-stretch" src="2023-09-folklore-images/geo_all_2.png" alt="geography at K=2">
+				</section>
+				<section>
+					<img class="r-stretch" src="2023-09-folklore-images/geo_all_3.png" alt="geography at K=3">
+				</section>
+				<section>
+					<img class="r-stretch" src="2023-09-folklore-images/geo_all_4.png" alt="geography at K=4">
+				</section>
+				<section>
+					<img class="r-stretch" src="2023-09-folklore-images/geo_all_5.png" alt="geography at K=5">
+				</section>
+				<section>
+					<img class="r-stretch" src="2023-09-folklore-images/geo_all_small.png" alt="geography at K=10">
+				</section>
+			</section>
+			<section>
+				<section>
+					<h3>But how do we understand this?</h3>
+					<img class="r-stretch" src="2023-09-folklore-images/k5.png" alt="geography at K=10">
+					<h6 class="fragment">Tools from computational linguistics!</h3>
+				</section>
+				<section>
+					<p><em>Relevance</em> metric: highlights motifs most characteristic of a cluster. </p>
+					<p class="fragment"> Computed using
+						estimated allele frequencies within each cluster
+					</p>
+				</section>
+				<section>
+					<h3>Slavic and European cluster</h3>
+					<img class="r-stretch" src="2023-09-folklore-images/K5c2.png" alt="relevance in Europe cluster">
+				</section>
+				<section>
+					<h3>Bering strait cluster</h3>
+					<img class="r-stretch" src="2023-09-folklore-images/K5c5.png" alt="relevance in Europe cluster">
+				</section>
+				<section>
+					<h3>Asia-africa cluster</h3>
+					<img class="r-stretch" src="2023-09-folklore-images/K5c4.png" alt="relevance in Europe cluster">
+				</section>
+				<section>
+					<h3>Australasia-America cluster</h3>
+					<img class="r-stretch" src="2023-09-folklore-images/K5c3.png" alt="relevance in Europe cluster">
+				</section>
+				<section>
+					<h3>The catch-all</h3>
+					<img class="r-stretch" src="2023-09-folklore-images/K5c1.png" alt="relevance in Europe cluster">
+				</section>
+			</section>
+			<section>
+				<section>
+					<h3>Saliency</h3>
+					<p>Motifs most helpful in distinguishing between clusters.</p>
+					<img class="r-stretch" src="2023-09-folklore-images/saliency_K5M1.png" alt="">
+				</section>
+				<section><img src="2023-09-folklore-images/saliency_m29x.png" alt="" class="r-stretch"></section>
+				<section><img src="2023-09-folklore-images/saliency_i83.png" alt="" class="r-stretch"></section>
+				<section><img src="2023-09-folklore-images/saliency_c14.png" alt="" class="r-stretch"></section>
+			</section>
+			<section>
+				<section>
+					<h3>What do people care about...</h3>
+					<h3><span class="fragment">and what can we contribute?</span></h3>
+				</section>
+				<section data-auto-animate>
+					<ul>
+						<li data-id="one">
+							Peopling of the new world. Two waves of migration?
+							<div class="fragment">
+								<img src="2023-09-folklore-images/america_clusters.png" alt="">
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<ul>
+						<li data-id="one">
+							Peopling of the new world. Two waves of migration?
+						</li>
+						<li>Linguistic vs. geographic barriers.</li>
+						<li class="fragment">Contact zones. Admixture.</li>
+						<li class="fragment">Innovations in folklore.</li>
+						<li class="fragment">Analysis of motifs, not groups.</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Example: motif co-occurrence</h3>
+					<ol>
+						<li class="fragment">STRUCTURE estimates motif distribution among clusters</li>
+						<li class="fragment">Distribution distance defines motif similarity</li>
+						<li class="fragment"><a href="http://127.0.0.1:8050/" target="_blank">Cluster</a> motifs
+							according to their
+							co-occurrence</li>
+					</ol>
+				</section>
+			</section>
+		</div>
+	</div>
+
+	<script src="revealjs/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script src="plugin/math/math.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			hash: true,
+			center: true,
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX]
+		});
+	</script>
+</body>
+
+</html>

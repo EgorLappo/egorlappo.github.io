@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="@egorlappo" />
+        
+        <meta name="description" content="In this post I define species trees and gene trees." />
+        
+        <title>Egor Lappo - Gene trees and species trees</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+        
+        <link rel="stylesheet" type="text/css" href="../css/main.css" />
+        <link rel="stylesheet" type="text/css" href="../css/blogpost.css" />
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css" integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js" integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <header>
+                    <nav>
+                        <a href="../">Home</a>
+                        <a href="../blog.html">Blog</a>
+                    </nav>
+                </header>
+            </div>
+            <div class="row">
+                <main role="main">
+                    <h2 class="display-5">Gene trees and species trees</h2>
+
+                    
+                      <h3>Some phylogenetics</h3>
+                    
+
+                    <div class="info">
+                        Posted on October 20, 2022
+
+                        
+                            by <a href="https://egorlappo.github.io">Egor Lappo</a>
+                        
+                    </div>
+
+                    <hr>
+
+                    <br>
+                    
+                    <div class="content">
+                        <p>Hello! In this post, I want to give an elementary introduction into a
+topic that <a href="https://egorlappo.github.io">I</a> have spent the
+last four years working on. I will be talking about a small topic in
+phylogenetics: <em>species trees</em> and <em>gene trees</em>. I will
+discuss what these trees are and why are they worth studying. I hope for
+this post to serve as an introduction to some more advanced topics I
+plan to cover later.</p>
+<p>Let’s start by settling on terms and definitions. We will be talking
+about biological <em>species</em> and evolutionary relationships between
+them. In fact, whenever I say “species”, you can just think about a
+population of kittens/puppies/bunnies that is in reproductive and
+geographical isolation from other similar populations. New species are
+formed through <em>speciation</em>, a process in which one existing
+species splits in two. This can happen for many reasons, such as the
+appearance of a separating geographical barrier or ecological
+specialization. I will always assume that all of our species originate
+from a single ancestral species through a sequence of speciations.</p>
+<h4 id="species-trees">Species trees</h4>
+<p>The history of the speciation events for a group of species is
+encoded by a tree, which we will call a <em>species tree</em> and denote
+by a letter <span class="math inline">\(S\)</span>. A species tree has
+<em>nodes</em> and <em>edges</em>. Each edge corresponds to a species
+that existed at some point in time. There are two types of nodes in
+<span class="math inline">\(S\)</span>: the tips of the tree are called
+<em>leaves</em> or <em>leaf nodes</em>, and the rest are called
+<em>internal nodes</em>. Each edge represents a species, with leaves
+(nodes and edges) representing the species that exist at present time.
+Each internal node represents some speciation event in the past.</p>
+<p>Here is an example tree showing five species (called <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(c\)</span>, <span class="math inline">\(d\)</span>, and <span class="math inline">\(e\)</span>) descending from a common ancestor
+<span class="math inline">\(r\)</span>.</p>
+<p><img src="../images/blog/tree_posts/tree.svg" alt="Figure 1. An example tree with five leaves. (Drawn with tree_graphics.)" />
+#### Gene trees</p>
+<p>It’s time to meet a second protagonist of the story: a <em>gene
+tree</em>. To obtain a gene tree, we sample genetic data from a single
+individual in each species, and hand over the samples to the “experts”.
+They extract the DNA, sequence it, and then run bioinformatic algorithms
+with cryptic titles like <a href="https://www.genome.jp/tools-bin/clustalw">CLUSTALW</a> or <a href="https://www.ebi.ac.uk/Tools/msa/muscle/">MUSCLE</a> to build a
+gene tree. Usually such gene tree is also given additional info such as
+<em>branch lengths</em>, but we don’t care about this for now. For us,
+both gene and species trees are purely combinatorial objects. Also, it’s
+important to note that we do not use any info about the species or the
+natural history behind them at any point in the process of building a
+gene tree.</p>
+<p>Each edge of a gene tree corresponds to a <em>genetic lineage</em>,
+which is a chunk of DNA that is transmitted from parents to children
+through the generations. Each internal node of a gene tree corresponds
+to a <em>coalescent event</em>, in which an existing lineage splits into
+two due to some mutation appearing in one of the children lineages. A
+gene tree shows only those lineages and coalescence that we know about
+in our (tiny) sample.</p>
+<p>Depending on your point of view, you can choose one of the two
+interpretations:</p>
+<ol type="1">
+<li><p>If you are into probability theory, you can think of the species
+tree as something that is known and fixed in the background, and the
+gene tree as the (random) data generated by a random process in which
+that species tree is a parameter.</p></li>
+<li><p>If you are into statistics, you can think of the gene tree as a
+(known) observation, in which case the species tree is an unknown
+parameter that needs to be estimated.</p></li>
+</ol>
+<p>But what is this random process I am talking about? And, more
+importantly…</p>
+<h3 id="wait-shouldnt-the-species-and-gene-tree-be-the-same">Wait,
+shouldn’t the species and gene tree be the same?</h3>
+<p>It turns out that no, <em>gene trees and species trees need not
+always be the same</em> (have the same topology). Species trees operate
+at a macro level, dealing with populations, speciations, etc. — all are
+processes involving possibly thousands of individuals. A gene tree
+attempts to trace the genetic <em>lineage</em> throughout the past, and
+the result is dependent on randomness inherent in reproductive
+behavior.</p>
+<p>The model that we have proposed to account for this is called the
+<em>multispecies coalescent</em>. In this post, I won’t try to explain
+what exactly is this thing. Instead, I will try to show you a single
+cryptic figure and let you figure it out yourself.</p>
+<figure>
+<img src="../images/blog/tree_posts/trends_eco_evo_rosenberg_figure.png" alt="Figure 2. Combining species into species trees, and tracing lineages in the resulting trees. (a) shows several species/populations brought together to form a thick species tree. The dots represent indiviuduals, horizontal layers of dots represent (non-overlapping) generations, and the lines connecting individuals in adjacent generations show “randomly generated” parent-child relationships. (b) When the species tree is “assembled” from individual populations, we see that the thin lines also form a tree – that’s our gene tree. (c) However, we also see that the topologies of the gene and species tree do not match! This happened naturally due to randomness in each population and randomness of speciation events. The figure is taken fom Degnan &amp; Rosenberg (2009)" />
+<figcaption aria-hidden="true"><strong>Figure 2.</strong> Combining
+species into species trees, and tracing lineages in the resulting trees.
+(a) shows several species/populations brought together to form a thick
+species tree. The dots represent indiviuduals, horizontal layers of dots
+represent (non-overlapping) generations, and the lines connecting
+individuals in adjacent generations show “randomly generated”
+parent-child relationships. (b) When the species tree is “assembled”
+from individual populations, we see that the thin lines also form a tree
+– that’s our gene tree. (c) However, we also see that the topologies of
+the gene and species tree do not match! This happened naturally due to
+randomness in each population and randomness of speciation events. The
+figure is taken fom <a href="https://rosenberglab.stanford.edu/papers/DegnanRosenberg2009-TREE.pdf">Degnan
+&amp; Rosenberg (2009)</a></figcaption>
+</figure>
+<p>What I really want you to take away from this discussion is that,
+given any species tree, the multispecies coalescent can produce
+<em>any</em> gene tree topology with nonzero probability. This is the
+essence of it: macroscopic events such as the formation of the new
+species are reflected in microscopic changes in the DNA, and DNA is
+often the only thing we can observe! In thse cases, all of the
+inferences about the species’ natural history have to take into account
+this possible discordance of tree shapes! This means that we need to
+take seriously the study of the details of the the relationship between
+species and gene trees. That’s it for today!</p>
+                    </div>
+                    
+                    
+                </main>
+            </div>
+
+            <div class="row">
+                <footer>
+                    Site proudly generated by
+                    <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>
