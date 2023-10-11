@@ -1,8 +1,8 @@
 ---
 title: Catspotting in Istanbul
-subtitle: What else is there to do
+subtitle: What else is there to do?
 description: |
-    Some test photos.
+    CATS
 tags: photo, film, mamiya, olympus
 ---
 
