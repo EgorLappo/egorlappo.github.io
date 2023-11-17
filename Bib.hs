@@ -44,7 +44,7 @@ formatArticle pub =  field pub "author"
                         vol <- maybeField pub "volume"
                         pages <- maybeField pub "pages"
                         let issue = maybeToStr (fmap (\i -> "(" <> i <> ")") (maybeField pub "issue"))
-                        return $ vol <> issue <> ": " <> pages <> ". ")
+                        return $ "**" <> vol <> "**" <> issue <> ": " <> pages <> ". ")
                   <> makelink (field pub "doi")
 
 formatMisc :: T -> String
