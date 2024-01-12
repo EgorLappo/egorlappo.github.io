@@ -5,7 +5,7 @@ title: Hello!
 I am <abbr title="$pronunciation$">Egor Lappo</abbr>! I am currently a PhD student in the Department of Biology at Stanford University, working with Prof. [Noah Rosenberg](https://rosenberglab.stanford.edu). 
 
 
-I am interested in data, math, evolution, populations, and culture. In 2022, I have graduated with a B.S with Honors in Mathematics from Stanford. I was advised by [Ciprian Manolescu](https://stanford.edu/~cm5).
+I am interested in data, math, evolution, populations, and culture. In 2022, I have graduated with a B.S. with Honors in Mathematics from Stanford. I was advised by [Ciprian Manolescu](https://stanford.edu/~cm5).
 
 Apart from research, I am interested in [chess](https://www.chess.com/member/egorlappo), knitting, functional programming, [music](https://soundcloud.com/egor-lappo), and video essays on YouTube.
 
